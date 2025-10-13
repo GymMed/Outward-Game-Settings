@@ -3,7 +3,7 @@
 </h1>
 <br/>
 <div align="center">
-  <img src="./preview/images/MASS.png" alt="Outward game setting to require enchantment recipe when enchanting."/>
+  <img src="./preview/images/Logo.png" alt="Outward game setting to require enchantment recipe when enchanting."/>
 </div>
 
 <div align="center">
@@ -20,29 +20,33 @@ This Outward mod allows you to change the way game works.
 <details>
     <summary>Require Enchantment Recipe To Enchant</summary>
 
-*Attempting to enchant an item without the required enchantment recipe in your inventory (pocket or backpack) will display an error and cancel the process. Config setting: `RequireRecipeToAllowEnchant`.*<br>
+_Attempting to enchant an item without the required enchantment recipe in your inventory (pocket or backpack) will display an error and cancel the process. Config setting: `RequireRecipeToAllowEnchant`._<br>
 ![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/1.png)
+
 </details>
 
 <details>
     <summary>Consume Enchantment on Use</summary>
 
-*Successfully enchanting an item consumes the enchantment recipe from your inventory. Recommended to use together with `Enchanting Requires Enchantment` setting. Config setting: `UseRecipeOnEnchanting`*<br>
+_Successfully enchanting an item consumes the enchantment recipe from your inventory. Recommended to use together with `Enchanting Requires Enchantment` setting. Config setting: `UseRecipeOnEnchanting`_<br>
 ![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/2.png)
+
 </details>
 
 <details>
     <summary>Enchanting Success Chance</summary>
 
-*Enchanting an item can fail based on a configurable success rate. Config setting: `EnchantingSuccessChance`*<br>
+_Enchanting an item can fail based on a configurable success rate. Config setting: `EnchantingSuccessChance`_<br>
 ![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/3.png)
+
 </details>
 
 <details>
     <summary>Play Audio on Enchanting Completion</summary>
 
-*Plays custom sound effects when the EnchantmentTable.DoneEnchanting event occurs. Success and failure each trigger different audio clips. Enabled with config setting: `PlayAudioOnEnchantingDone`*<br>
+_Plays custom sound effects when the EnchantmentTable.DoneEnchanting event occurs. Success and failure each trigger different audio clips. Enabled with config setting: `PlayAudioOnEnchantingDone`_<br>
 ![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/3.png)
+
 </details>
 
 ## How to change settings?
