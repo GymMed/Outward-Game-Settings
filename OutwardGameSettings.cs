@@ -2,6 +2,7 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using OutwardModsCommunicator.EventBus;
 using OutwardGameSettings.Utility.Helpers;
 using SideLoader;
 using System;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using OutwardGameSettings.Events;
 
 // RENAME 'OutwardGameSettings' TO SOMETHING ELSE
 namespace OutwardGameSettings
@@ -17,11 +19,11 @@ namespace OutwardGameSettings
     public class OutwardGameSettings : BaseUnityPlugin
     {
         // Choose a GUID for your project. Change "myname" and "mymod".
-        public const string GUID = "gymmed.outwardgamesettings";
+        public const string GUID = "gymmed.outward_game_settings";
         // Choose a NAME for your project, generally the same as your Assembly Name.
         public const string NAME = "Outward Game Settings";
         // Increment the VERSION when you release a new version of your mod.
-        public const string VERSION = "0.0.1";
+        public const string VERSION = "1.0.0";
 
         public static string prefix = "[GymMed-Game-Settings]";
 
@@ -55,11 +57,16 @@ namespace OutwardGameSettings
                 "Remove recipe after using it on enchanting?"
             );
 
+            var enchantDescription = new ConfigDescription(
+                "What is success chance(%) of enchanting?",
+                new AcceptableValueRange<int>(0, 100)
+            );
+
             EnchantingSuccessChance = Config.Bind(
                 "Enchanting Modifications",
                 "EnchantingSuccessChance",
                 50,
-                "What is success chance(%) of enchanting?"
+                enchantDescription
             );
 
             PlayAudioOnEnchantingDone = Config.Bind(
@@ -68,6 +75,11 @@ namespace OutwardGameSettings
                 true,
                 "Play additional audio on enchanting failed/success?"
             );
+
+            // Register all events for publishing, when other mods can discover them
+            EventBus.RegisterEvent(GUID, EventBusPublisher.EnchantmentMenuTryEnchant, ("menu", typeof(EnchantmentMenu)));
+            EventBus.RegisterEvent(GUID, EventBusPublisher.EnchantmentTableDoneEnchantingFail, ("table", typeof(EnchantmentTable)));
+            EventBus.RegisterEvent(GUID, EventBusPublisher.EnchantmentTableDoneEnchantingSuccess, ("table", typeof(EnchantmentTable)));
 
             // Harmony is for patching methods. If you're not patching anything, you can comment-out or delete this line.
             new Harmony(GUID).PatchAll();
@@ -81,7 +93,7 @@ namespace OutwardGameSettings
 
         public static void LogMessage(string message)
         {
-            Log.LogMessage(OutwardGameSettings.prefix + " " + message);
+            Log.LogMessage($"[{OutwardGameSettings.prefix}] {message}");
         }
 
         [HarmonyPatch(typeof(ResourcesPrefabManager), nameof(ResourcesPrefabManager.Load))]
@@ -105,6 +117,7 @@ namespace OutwardGameSettings
 #if DEBUG
                 SL.Log($"{OutwardGameSettings.prefix} Patch_TryEnchant called!");
 #endif
+                EventBusPublisher.SendTryEnchant(__instance);
 
                 // If I am sure that errors will occure I let them pass to original method to get caught and print default messages
                 if (!__instance.m_refItemInChest)

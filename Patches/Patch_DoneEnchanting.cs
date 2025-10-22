@@ -10,50 +10,10 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using SideLoader;
 using OutwardGameSettings.Managers;
+using OutwardGameSettings.Events;
 
 namespace OutwardGameSettings.Patches
 {
-    /*
-    [HarmonyPatch(typeof(EnchantmentTable), "DoneEnchanting")]
-    public class Patch_DoneEnchanting
-    {
-        static bool Prefix(EnchantmentTable __instance)
-        {
-#if DEBUG
-            SL.Log($"{OutwardGameSettings.prefix} Patch_DoneEnchanting called!");
-#endif
-            // Only master client decides the outcome
-            if (PhotonNetwork.isMasterClient)
-            {
-                int upgradeChance = ConfigsHelper.GetPercentageValueFromConfig(OutwardGameSettings.EnchantingSuccessChance.Value);
-                int randomValue = new System.Random().Next(1, 101);
-                bool success = randomValue <= upgradeChance;
-
-                // Send result to all clients using ItemManager’s PhotonView
-                var itemManager = ItemManager.Instance;
-                if (itemManager != null && itemManager.photonView != null)
-                {
-                    itemManager.photonView.RPC(
-                        "RPC_EnchantingResult",
-                        PhotonTargets.All,
-                        __instance.UID,
-                        success
-                    );
-                }
-                else
-                {
-                    SL.Log($"{OutwardGameSettings.prefix} ItemManager or its PhotonView is null.");
-                }
-
-                // Skip original DoneEnchanting (result handled via RPC)
-                return false;
-            }
-
-            // Non-masters skip; they'll get the RPC
-            return false;
-        }
-    }*/
-
     [HarmonyPatch(typeof(EnchantmentTable), "DoneEnchanting")]
     public class Patch_DoneEnchanting
     {
@@ -71,6 +31,16 @@ namespace OutwardGameSettings.Patches
 
                 if (randomValue > upgradeChance)
                 {
+                    if (__instance.PendingEnchantment?.Name != null && (__instance.m_containedItems?.Values?[0] as Equipment) != null)
+                    {
+                        Equipment equipment = __instance.m_containedItems.Values[0] as Equipment;
+
+                        NotificationsManager.Instance.BroadcastGlobalSideNotification($"Enchanting {equipment.DisplayName} with {__instance.PendingEnchantment.Name} failed!");
+                    }
+                    else
+                        NotificationsManager.Instance.BroadcastGlobalSideNotification($"Enchanting failed!");
+
+
                     __instance.ActivateFX(false);
                     if(!PhotonNetwork.isNonMasterClientInRoom)
                     {
@@ -94,18 +64,10 @@ namespace OutwardGameSettings.Patches
                         }
                     }
 
-                    if (__instance.PendingEnchantment?.Name != null && (__instance.m_containedItems?.Values?[0] as Equipment) != null)
-                    {
-                        Equipment equipment = __instance.m_containedItems.Values[0] as Equipment;
-
-                        NotificationsManager.Instance.BroadcastGlobalSideNotification($"{__instance.PendingEnchantment.Name} on {equipment.DisplayName} failed!");
-                    }
-                    else
-                        NotificationsManager.Instance.BroadcastGlobalSideNotification($"Enchanting failed!");
-
                     if(OutwardGameSettings.PlayAudioOnEnchantingDone.Value)
                         Global.AudioManager.PlaySoundAtPosition(GlobalAudioManager.Sounds.SFX_BLOCK_Sword_2H, __instance.transform, 0f, 1f, 1f, 1f, 1f);
 
+                    EventBusPublisher.SendFailEnchanting(__instance);
                     return false;
                 }
 
@@ -115,7 +77,7 @@ namespace OutwardGameSettings.Patches
             {
                 Equipment equipment = __instance.m_containedItems.Values[0] as Equipment;
 
-                NotificationsManager.Instance.BroadcastGlobalSideNotification($"{__instance.PendingEnchantment.Name} on {equipment.DisplayName} succeeded!");
+                NotificationsManager.Instance.BroadcastGlobalSideNotification($"Enchanting {equipment.DisplayName} with {__instance.PendingEnchantment.Name} succeeded!");
             }
             else
                 NotificationsManager.Instance.BroadcastGlobalSideNotification($"Enchanting succeeded!");
@@ -123,6 +85,7 @@ namespace OutwardGameSettings.Patches
             if(OutwardGameSettings.PlayAudioOnEnchantingDone.Value)
                 Global.AudioManager.PlaySoundAtPosition(GlobalAudioManager.Sounds.SFX_SKILL_GongStrike_Preparation, __instance.transform, 0f, 1f, 1f, 1f, 1f);
 
+            EventBusPublisher.SendSuccessEnchanting(__instance);
             return true;
         }
     }

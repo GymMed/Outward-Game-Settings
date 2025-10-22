@@ -7,15 +7,17 @@
 </div>
 
 <div align="center">
-	<a href="https://thunderstore.io/c/outward/p/GymMed/GameSettings/">
-		<img src="https://img.shields.io/thunderstore/dt/GymMed/GameSettings" alt="Thunderstore Downloads">
+	<a href="https://thunderstore.io/c/outward/p/GymMed/Game_Settings/">
+		<img src="https://img.shields.io/thunderstore/dt/GymMed/Game_Settings" alt="Thunderstore Downloads">
 	</a>
 	<a href="https://github.com/GymMed/Outward-Game-Settings/releases/latest">
-		<img src="https://img.shields.io/thunderstore/v/GymMed/GameSettings" alt="Thunderstore Version">
+		<img src="https://img.shields.io/thunderstore/v/GymMed/Game_Settings" alt="Thunderstore Version">
 	</a>
 </div>
 
 This Outward mod allows you to change the way game works.
+
+## Available Settings
 
 <details>
     <summary>Require Enchantment Recipe To Enchant</summary>
@@ -45,13 +47,13 @@ _Enchanting an item can fail based on a configurable success rate. Config settin
     <summary>Play Audio on Enchanting Completion</summary>
 
 _Plays custom sound effects when the EnchantmentTable.DoneEnchanting event occurs. Success and failure each trigger different audio clips. Enabled with config setting: `PlayAudioOnEnchantingDone`_<br>
-![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/3.png)
+![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/4.png)
 
 </details>
 
 ## How to change settings?
 
-Currently all settings can be changed in `BepInEx\config\gymmed.outwardgamesettings.cfg`.
+Currently all settings can be changed in `BepInEx\config\gymmed.outward_game_settings.cfg`. If you are mod pack creator you can use [outward mods communicator](https://github.com/GymMed/Outward-Mods-Communicator) to change values and rebalance gameplay.
 
 ## How to use
 
