@@ -35,7 +35,7 @@ namespace OutwardGameSettings.Patches
                     {
                         Equipment equipment = __instance.m_containedItems.Values[0] as Equipment;
 
-                        NotificationsManager.Instance.BroadcastGlobalSideNotification($"Enchanting {equipment.DisplayName} with {__instance.PendingEnchantment.Name} failed!");
+                        NotificationsManager.Instance.BroadcastGlobalSideNotification($"{equipment.DisplayName} failed to be enchanted with {__instance.PendingEnchantment.Name}!");
                     }
                     else
                         NotificationsManager.Instance.BroadcastGlobalSideNotification($"Enchanting failed!");
@@ -77,7 +77,7 @@ namespace OutwardGameSettings.Patches
             {
                 Equipment equipment = __instance.m_containedItems.Values[0] as Equipment;
 
-                NotificationsManager.Instance.BroadcastGlobalSideNotification($"Enchanting {equipment.DisplayName} with {__instance.PendingEnchantment.Name} succeeded!");
+                NotificationsManager.Instance.BroadcastGlobalSideNotification($"{equipment.DisplayName} was successfully enchanted with {__instance.PendingEnchantment.Name}!");
             }
             else
                 NotificationsManager.Instance.BroadcastGlobalSideNotification($"Enchanting succeeded!");

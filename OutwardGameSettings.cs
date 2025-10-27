@@ -23,7 +23,7 @@ namespace OutwardGameSettings
         // Choose a NAME for your project, generally the same as your Assembly Name.
         public const string NAME = "Outward Game Settings";
         // Increment the VERSION when you release a new version of your mod.
-        public const string VERSION = "1.0.0";
+        public const string VERSION = "1.0.1";
 
         public static string prefix = "[GymMed-Game-Settings]";
 
@@ -76,8 +76,8 @@ namespace OutwardGameSettings
                 "Play additional audio on enchanting failed/success?"
             );
 
-            // Register all events for publishing, when other mods can discover them
-            EventBus.RegisterEvent(GUID, EventBusPublisher.EnchantmentMenuTryEnchant, ("menu", typeof(EnchantmentMenu)));
+            // Register all events for publishing/subscribing, when other mods can discover them
+            EventBus.RegisterEvent(GUID, EventBusPublisher.EnchantmentMenuTryEnchant, ("menu", typeof(EnchantmentMenu), "The enchantment menu instance that invoked the TryEnchant method."));
             EventBus.RegisterEvent(GUID, EventBusPublisher.EnchantmentTableDoneEnchantingFail, ("table", typeof(EnchantmentTable)));
             EventBus.RegisterEvent(GUID, EventBusPublisher.EnchantmentTableDoneEnchantingSuccess, ("table", typeof(EnchantmentTable)));
 
@@ -93,7 +93,7 @@ namespace OutwardGameSettings
 
         public static void LogMessage(string message)
         {
-            Log.LogMessage($"[{OutwardGameSettings.prefix}] {message}");
+            Log.LogMessage($"{OutwardGameSettings.prefix} {message}");
         }
 
         [HarmonyPatch(typeof(ResourcesPrefabManager), nameof(ResourcesPrefabManager.Load))]
@@ -106,6 +106,7 @@ namespace OutwardGameSettings
                 #endif
 
                 EnchantmentsHelper.FixFilterRecipe();
+                EventBusDataPresenter.LogRegisteredEvents();
             }
         }
 

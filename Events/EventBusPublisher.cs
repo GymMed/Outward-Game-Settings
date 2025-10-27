@@ -14,31 +14,31 @@ namespace OutwardGameSettings.Events
         public const string EnchantmentTableDoneEnchantingFail = "EnchantmentTable@DoneEnchanting_Fail";
         public const string EnchantmentTableDoneEnchantingSuccess = "EnchantmentTable@DoneEnchanting_Success";
 
-        public static void SendTryEnchant(EnchantmentMenu menu)
+        public static void SendTryEnchant(EnchantmentMenu enchantmentMenu)
         {
             var payload = new EventPayload
             {
-                ["EnchantmentMenu"] = menu,
+                ["menu"] = enchantmentMenu,
             };
 
             EventBus.Publish(OutwardGameSettings.GUID, EnchantmentMenuTryEnchant, payload);
         }
 
-        public static void SendFailEnchanting(EnchantmentTable table)
+        public static void SendFailEnchanting(EnchantmentTable enchantmentTable)
         {
             var payload = new EventPayload
             {
-                ["EnchantmentTable"] = table,
+                ["table"] = enchantmentTable,
             };
 
             EventBus.Publish(OutwardGameSettings.GUID, EnchantmentTableDoneEnchantingFail, payload);
         }
 
-        public static void SendSuccessEnchanting(EnchantmentTable table)
+        public static void SendSuccessEnchanting(EnchantmentTable enchantmentTable)
         {
             var payload = new EventPayload
             {
-                ["EnchantmentTable"] = table,
+                ["table"] = enchantmentTable,
             };
 
             EventBus.Publish(OutwardGameSettings.GUID, EnchantmentTableDoneEnchantingSuccess, payload);

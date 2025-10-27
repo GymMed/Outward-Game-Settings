@@ -3,7 +3,7 @@
 </h1>
 <br/>
 <div align="center">
-  <img src="./preview/images/Logo.png" alt="Outward game setting to require enchantment recipe when enchanting."/>
+  <img src="./preview/images/0.png" alt="Outward game setting to require enchantment recipe when enchanting."/>
 </div>
 
 <div align="center">
