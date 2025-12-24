@@ -11,18 +11,19 @@ using BepInEx.Logging;
 using SideLoader;
 using OutwardGameSettings.Managers;
 using OutwardGameSettings.Events;
+using OutwardGameSettings.BepInEx.Configs;
 
 namespace OutwardGameSettings.Patches
 {
     [HarmonyPatch(typeof(EnchantmentTable), "DoneEnchanting")]
-    public class Patch_DoneEnchanting
+    public class Patch_EnchantmentTable_DoneEnchanting
     {
         static bool Prefix(EnchantmentTable __instance)
         {
 #if DEBUG
             SL.Log($"{OutwardGameSettings.prefix} Patch_DoneEnchanting called!");
 #endif
-            int upgradeChance = ConfigsHelper.GetPercentageValueFromConfig(OutwardGameSettings.EnchantingSuccessChance.Value);
+            int upgradeChance = ConfigsHelper.GetPercentageValueFromConfig(EnchantmentRecipesConfigs.EnchantingSuccessChance.Value);
 
             if (upgradeChance != 100)
             {
@@ -64,7 +65,7 @@ namespace OutwardGameSettings.Patches
                         }
                     }
 
-                    if(OutwardGameSettings.PlayAudioOnEnchantingDone.Value)
+                    if(EnchantmentRecipesConfigs.PlayAudioOnEnchantingDone.Value)
                         Global.AudioManager.PlaySoundAtPosition(GlobalAudioManager.Sounds.SFX_BLOCK_Sword_2H, __instance.transform, 0f, 1f, 1f, 1f, 1f);
 
                     EventBusPublisher.SendFailEnchanting(__instance);
@@ -82,7 +83,7 @@ namespace OutwardGameSettings.Patches
             else
                 NotificationsManager.Instance.BroadcastGlobalSideNotification($"Enchanting succeeded!");
 
-            if(OutwardGameSettings.PlayAudioOnEnchantingDone.Value)
+            if(EnchantmentRecipesConfigs.PlayAudioOnEnchantingDone.Value)
                 Global.AudioManager.PlaySoundAtPosition(GlobalAudioManager.Sounds.SFX_SKILL_GongStrike_Preparation, __instance.transform, 0f, 1f, 1f, 1f, 1f);
 
             EventBusPublisher.SendSuccessEnchanting(__instance);

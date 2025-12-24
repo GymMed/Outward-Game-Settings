@@ -19,7 +19,7 @@ namespace OutwardGameSettings.Utility.Helpers
                 {
                     filteredItems.Add(specificItem);
                     #if DEBUG
-                    SL.Log($"{OutwardGameSettings.prefix} got item of type {specificItem.GetType().Name} name {specificItem.Name} id {specificItem.ItemID}");
+                    OutwardGameSettings.LogMessage($"{OutwardGameSettings.prefix} got item of type {specificItem.GetType().Name} name {specificItem.Name} id {specificItem.ItemID}");
                     #endif
                 }
             }

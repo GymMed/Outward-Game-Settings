@@ -1,8 +1,6 @@
 ﻿using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
-using OutwardModsCommunicator.EventBus;
 using OutwardGameSettings.Utility.Helpers;
 using SideLoader;
 using System;
@@ -11,6 +9,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using OutwardGameSettings.Events;
+using OutwardGameSettings.Managers;
+using OutwardGameSettings.BepInEx.Configs;
+using OutwardGameSettings.Utility.Enums;
+using OutwardGameSettings.Managers.Testing;
+using UnityEngine;
 
 // RENAME 'OutwardGameSettings' TO SOMETHING ELSE
 namespace OutwardGameSettings
@@ -23,19 +26,18 @@ namespace OutwardGameSettings
         // Choose a NAME for your project, generally the same as your Assembly Name.
         public const string NAME = "Outward Game Settings";
         // Increment the VERSION when you release a new version of your mod.
-        public const string VERSION = "1.0.1";
+        public const string VERSION = "1.1.0";
 
         public static string prefix = "[GymMed-Game-Settings]";
 
+#if DEBUG
+        public const string Start_War = "Start War!";
+        public const string Spawn_Wave = "Spawn Wave!";
+        public const string Clean_Dead_Bodies = "Clean Dead Bodies";
+#endif
+
         internal static ManualLogSource Log;
 
-        // If you need settings, define them like so:
-        public static ConfigEntry<bool> RequireRecipeToAllowEnchant;
-        public static ConfigEntry<bool> UseRecipeOnEnchanting;
-        public static ConfigEntry<int> EnchantingSuccessChance;
-        public static ConfigEntry<bool> PlayAudioOnEnchantingDone;
-
-        // Awake is called when your plugin is created. Use this to set up your mod.
         internal void Awake()
         {
             Log = this.Logger;
@@ -43,52 +45,74 @@ namespace OutwardGameSettings
 
             // Any config settings you define should be set up like this:
             //ExampleConfig = Config.Bind("ExampleCategory", "ExampleSetting", false, "This is an example setting.");
-            RequireRecipeToAllowEnchant = Config.Bind(
-                "Enchanting Modifications",
-                "RequireRecipeToAllowEnchant",
-                true,
-                "Allow enchanting only if enchantment is on character?"
-            );
+            EnchantmentRecipesConfigs.Init(this);
+            SkillsExpertiseConfigs.Init(this);
 
-            UseRecipeOnEnchanting = Config.Bind(
-                "Enchanting Modifications",
-                "UseRecipeOnEnchanting",
-                true,
-                "Remove recipe after using it on enchanting?"
-            );
+            EnemiesConfigs.Init(this);
+            EnemyAmbushesConfigs.Init(this);
+            EnemyWarsConfigs.Init(this);
+            EnemySpawnsConfigs.Init(this);
+            SeasonsConfigs.Init(this);
 
-            var enchantDescription = new ConfigDescription(
-                "What is success chance(%) of enchanting?",
-                new AcceptableValueRange<int>(0, 100)
-            );
+            SeasonsManager.Instance.Init();
 
-            EnchantingSuccessChance = Config.Bind(
-                "Enchanting Modifications",
-                "EnchantingSuccessChance",
-                50,
-                enchantDescription
-            );
-
-            PlayAudioOnEnchantingDone = Config.Bind(
-                "Enchanting Modifications",
-                "PlayAudioOnEnchantingDone",
-                true,
-                "Play additional audio on enchanting failed/success?"
-            );
-
-            // Register all events for publishing/subscribing, when other mods can discover them
-            EventBus.RegisterEvent(GUID, EventBusPublisher.EnchantmentMenuTryEnchant, ("menu", typeof(EnchantmentMenu), "The enchantment menu instance that invoked the TryEnchant method."));
-            EventBus.RegisterEvent(GUID, EventBusPublisher.EnchantmentTableDoneEnchantingFail, ("table", typeof(EnchantmentTable)));
-            EventBus.RegisterEvent(GUID, EventBusPublisher.EnchantmentTableDoneEnchantingSuccess, ("table", typeof(EnchantmentTable)));
+            EventBusRegister.RegisterEvents();
 
             // Harmony is for patching methods. If you're not patching anything, you can comment-out or delete this line.
             new Harmony(GUID).PatchAll();
+
+#if DEBUG
+            DynamicDebugger.Init();
+
+            CustomKeybindings.AddAction(Start_War, KeybindingsCategory.CustomKeybindings, ControlType.Both);
+            CustomKeybindings.AddAction(Spawn_Wave, KeybindingsCategory.CustomKeybindings, ControlType.Both);
+
+            foreach(string keyBinding in TestingKeyBindings.EnemiesKeyBindings)
+            {
+                CustomKeybindings.AddAction(keyBinding, KeybindingsCategory.CustomKeybindings, ControlType.Both);
+            }
+
+            CustomKeybindings.AddAction(Clean_Dead_Bodies, KeybindingsCategory.CustomKeybindings, ControlType.Both);
+
+            OutwardGameSettings.LogMessage("Setting full stack trace logging...");
+            Application.logMessageReceived += (condition, stack, type) =>
+            {
+                if (type == LogType.Exception)
+                {
+                    OutwardGameSettings.LogMessage($"[GLOBAL EXCEPTION] {condition}\n{stack}");
+                }
+            };
+#endif
         }
 
         // Update is called once per frame. Use this only if needed.
         // You also have all other MonoBehaviour methods available (OnGUI, etc)
         internal void Update()
         {
+#if DEBUG
+            if (CustomKeybindings.GetKeyDown(Start_War))
+            {
+                EnemyWaveManager.Instance.StartWarOfRandomSize();
+            }
+
+            if (CustomKeybindings.GetKeyDown(Spawn_Wave))
+            {
+                EnemyWaveManager.Instance.SpawnRandomWave(EnemyAmbushesConfigs.NotifyOnAmbush.Value);
+            }
+
+            for (int currentKey = 0; currentKey < TestingKeyBindings.EnemiesKeyBindings.Length; currentKey++)
+            {
+                if (CustomKeybindings.GetKeyDown(TestingKeyBindings.EnemiesKeyBindings[currentKey]))
+                {
+                    EnemyWaveManager.Instance.StartWave(currentKey, EnemyAmbushesConfigs.NotifyOnAmbush.Value);
+                }
+            }
+
+            if (CustomKeybindings.GetKeyDown(Clean_Dead_Bodies))
+            {
+                EnemyWaveManager.Instance.CleanDeadBodies();
+            }
+#endif
         }
 
         public static void LogMessage(string message)
@@ -101,67 +125,19 @@ namespace OutwardGameSettings
         {
             static void Postfix(ResourcesPrefabManager __instance)
             {
-                #if DEBUG
-                SL.Log($"{OutwardGameSettings.prefix} ResourcesPrefabManager@Load called!");
-                #endif
-
-                EnchantmentsHelper.FixFilterRecipe();
-                EventBusDataPresenter.LogRegisteredEvents();
-            }
-        }
-
-        [HarmonyPatch(typeof(EnchantmentMenu), "TryEnchant")]
-        public class Patch_TryEnchant
-        {
-            static bool Prefix(EnchantmentMenu __instance)
-            {
 #if DEBUG
-                SL.Log($"{OutwardGameSettings.prefix} Patch_TryEnchant called!");
+                SL.Log($"{OutwardGameSettings.prefix} ResourcesPrefabManager@Load called!");
 #endif
-                EventBusPublisher.SendTryEnchant(__instance);
-
-                // If I am sure that errors will occure I let them pass to original method to get caught and print default messages
-                if (!__instance.m_refItemInChest)
+                try
                 {
-                    return true;
+                    EnchantmentsHelper.FixFilterRecipe();
+                    EnemyEquipmentManager.Instance.Init();
+                    EnemyWaveManager.Instance.Init();
                 }
-                int enchantmentID = __instance.GetEnchantmentID();
-
-                if (enchantmentID == -1 || __instance.m_refItemInChest.IsEnchanted)
+                catch(Exception ex)
                 {
-                    return true;
+                    LogMessage($"ResourcesPrefabManager@Load error: \"{ex.Message}\"");
                 }
-                Enchantment enchantment = ResourcesPrefabManager.Instance.GetEnchantmentPrefab(enchantmentID);
-
-                if (enchantment == null)
-                    return true; // Continue the original method
-
-                if (__instance.m_refEnchantmentStation.ContainedItem == null)
-                    return true;
-
-                List<EnchantmentRecipeItem> enchantmentItems = EnchantmentsHelper.GetAvailableEnchantmentRecipeItemsInInventory(__instance.m_refEnchantmentStation.ContainedItem, __instance.LocalCharacter.Inventory);
-
-                if(RequireRecipeToAllowEnchant.Value)
-                {
-                    if (!EnchantmentsHelper.IsEnchantmentInList(enchantmentID, enchantmentItems))
-                    {
-                        __instance.m_characterUI.ShowInfoNotification("You need to have enchantment!");
-                        return false;
-                    }
-                }
-
-                if(UseRecipeOnEnchanting.Value)
-                {
-
-                    EnchantmentRecipeItem foundItem = EnchantmentsHelper.GetEnchantmentInTheList(enchantmentID, enchantmentItems);
-
-                    if (foundItem)
-                    {
-                        __instance.m_characterUI.ShowInfoNotification($"{foundItem.Name} has been used!");
-                        ItemManager.Instance.DestroyItem(foundItem);
-                    }
-                }
-                return true; // Continue the original method
             }
         }
     }
