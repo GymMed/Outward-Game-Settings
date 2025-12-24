@@ -29,7 +29,7 @@ This Outward mod allows you to change the way game works.
     <summary>Require Enchantment Recipe To Enchant</summary>
 
 _Attempting to enchant an item without the required enchantment recipe in your inventory (pocket or backpack) will display an error and cancel the process. Config setting: `RequireRecipeToAllowEnchant`._<br>
-![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/1.png)
+![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/1.png)
 
 </details>
 
@@ -37,7 +37,7 @@ _Attempting to enchant an item without the required enchantment recipe in your i
     <summary>Consume Enchantment on Use</summary>
 
 _Successfully enchanting an item consumes the enchantment recipe from your inventory. Recommended to use together with `Enchanting Requires Enchantment` setting. Config setting: `UseRecipeOnEnchanting`_<br>
-![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/2.png)
+![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/2.png)
 
 </details>
 
@@ -45,7 +45,7 @@ _Successfully enchanting an item consumes the enchantment recipe from your inven
     <summary>Enchanting Success Chance</summary>
 
 _Enchanting an item can fail based on a configurable success rate. Config setting: `EnchantingSuccessChance`_<br>
-![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/3.png)
+![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/3.png)
 
 </details>
 
@@ -53,7 +53,7 @@ _Enchanting an item can fail based on a configurable success rate. Config settin
     <summary>Play Audio on Enchanting Completion</summary>
 
 _Plays custom sound effects when the EnchantmentTable.DoneEnchanting event occurs. Success and failure each trigger different audio clips. Enabled with config setting: `PlayAudioOnEnchantingDone`_<br>
-![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/4.png)
+![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/4.png)
 
 </details>
 </details>
@@ -67,7 +67,7 @@ _Plays custom sound effects when the EnchantmentTable.DoneEnchanting event occur
 When enemy dies by you, you have a chance to learn weapon type skill.<br>
 If all weapon type skills a learned you will be able to learn other weapon types skills.<br>
 Finally if all weapon type based skills a learned you can learn monster skills that could be broken.<br>
-![Video](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/videos/SkillReceived.mp4)
+![Video](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/videos/SkillReceived.mp4)
 
 </details>
 
@@ -75,7 +75,8 @@ Finally if all weapon type based skills a learned you can learn monster skills t
 
 <details>
     <summary>Enemy Scenarios</summary>
-In game there are new events that happen randomly on world time change.<br>
+In game there are new events that happen randomly on world time change.<br><br>
+
 Currently enemies don't drop loot. Loot can be added by other mods with 
 <a href="https://thunderstore.io/c/outward/p/GymMed/Loot_Manager/">Loot Manager</a>.
 Enemies can indeed cast spells and early on it is better to avoid them.
@@ -84,7 +85,7 @@ Enemies can indeed cast spells and early on it is better to avoid them.
     <summary>War Scenario</summary>
 
 Spawns random faction groups that start fighting. Only appears in open world.
-![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/war.png)
+![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/war.png)
 
 </details>
 
@@ -92,7 +93,7 @@ Spawns random faction groups that start fighting. Only appears in open world.
     <summary>Ambush Scenario</summary>
 
 Spawns random faction group. The only scenario that can happen in towns but only from 20:00 to 04:00.
-![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/ambush.png)
+![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/ambush.png)
 
 </details>
 
@@ -100,7 +101,7 @@ Spawns random faction group. The only scenario that can happen in towns but only
     <summary>Wanderer Encounter Scenario</summary>
 
 Spawns faction enemy.
-![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/wanderer.png)
+![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/wanderer.png)
 
 </details>
 
@@ -123,7 +124,8 @@ Additionally 3 seasons are added.
     <summary>Winter</summary>
     
 Adds winter to other regions.
-![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/winter-hallowed-marsh.png)
+
+![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/winter-hallowed-marsh.png)
 </details>
 
 <details>
@@ -132,14 +134,14 @@ Adds winter to other regions.
 Cloudy mist season that makes very hard to navigate and each hour changes
 the fog density.
 
-![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/foggy-spirits.png)
+![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/foggy-spirits.png)
 </details>
 
 <details>
     <summary>Great war</summary>
 
 Each hour there is a chance you will encounter additional war/ambush/wanderer scenario or nothing.
-![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/main/preview/images/great-war.png)
+![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/great-war.png)
 </details>
 
 </details>
