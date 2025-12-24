@@ -67,7 +67,10 @@ _Plays custom sound effects when the EnchantmentTable.DoneEnchanting event occur
 When enemy dies by you, you have a chance to learn weapon type skill.<br>
 If all weapon type skills a learned you will be able to learn other weapon types skills.<br>
 Finally if all weapon type based skills a learned you can learn monster skills that could be broken.<br>
-![Video](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/videos/SkillReceived.mp4)
+
+<div align="center">
+	<video src="https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/videos/SkillReceived.mp4" width="640" controls></video>
+</div>
 
 </details>
 
@@ -150,7 +153,7 @@ Each hour there is a chance you will encounter additional war/ambush/wanderer sc
     <summary>Sideloader</summary>
 
 I did add additional character AI classes. They work more as an example instead
-of actually using them in your mods but you are free to do whatever you want.
+of actually using them in your mods.
 </details>
 
 ## How to change settings?
