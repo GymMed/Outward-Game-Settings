@@ -34,42 +34,36 @@ namespace OutwardGameSettings.Managers
             }
         }
 
-        public bool HasAddedSeasons = false;
-        public bool HasAddedSeasonEffects = false;
+        public bool HasAddedSeasons = true;
+        public bool HasAddedSeasonEffects = true;
+        public int TempSeasonIndex = 0;
+        public bool HasAddedTempSeasonIndex = true;
 
         public void Init()
         {
             SL.OnSceneLoaded += () =>
             {
-                List<Season> seasons = EnvironmentConditions.Instance.Seasons;
-
-                foreach(Season season in seasons)
-                {
-                    OutwardGameSettings.LogMessage($"name {season.name} day " + $" minT: {season.MinDayTemperature} maxT:{season.MaxDayTemperature}" +
-                        $" night minT: {season.MinNightTemperature} maxT: {season.MaxNightTemperature}, start {season.StartMonth} end {season.EndMonth}" +
-                        $" fog {season.FogDensity} next {season.NextSeason}");
-                }
+                SeasonsManager.Instance.HasAddedSeasons = false;
+                SeasonsManager.Instance.HasAddedSeasonEffects = false;
             };
 
+            /*
             SceneManager.sceneLoaded += (Scene scene, LoadSceneMode _) =>
             {
                 OutwardGameSettings.LogMessage($"Changed HasAddedSeasons");
                 SeasonsManager.Instance.HasAddedSeasons = false;
+                SeasonsManager.Instance.HasAddedSeasonEffects = false;
             };
+            */
         }
 
         public void AddHourEffectsToSeason()
         {
-#if DEBUG
-            OutwardGameSettings.LogMessage($"SeasonsManager@AddHourEffectsToSeason triggered!");
-#endif
-
             if (EnvironmentConditions.Instance.CurrentSeason == null)
                 return;
 
             foreach (KeyValuePair<CustomSeasons, string> season in CustomSeasonsHelper.SeasonsNames)
             {
-                OutwardGameSettings.LogMessage($"SeasonsManager@AddHourEffectsToSeason season: {season.Value} current: {EnvironmentConditions.Instance.CurrentSeason.name}.");
                 if (EnvironmentConditions.Instance.CurrentSeason.name.Equals(season.Value, StringComparison.OrdinalIgnoreCase))
                 {
                     if (!CustomSeasonsHelper.Seasons.TryGetValue(season.Key, out BasicSeason basicSeason))
@@ -333,6 +327,15 @@ namespace OutwardGameSettings.Managers
                     break;
             }
 
+            if(!SeasonsManager.Instance.HasAddedTempSeasonIndex)
+            {
+                EnvironmentConditions.Instance.CurrentSeasonIndex = SeasonsManager.Instance.TempSeasonIndex;
+                SeasonsManager.Instance.TempSeasonIndex = 0;
+                SeasonsManager.Instance.HasAddedTempSeasonIndex = true;
+
+                OutwardGameSettings.LogMessage($"Set season to {EnvironmentConditions.Instance.CurrentSeasonIndex}");
+            }
+
             return addedSeasons;
         }
 
@@ -382,6 +385,36 @@ namespace OutwardGameSettings.Managers
             //FillWeatherEffects(ref WeatherManagerNew.Instance.RainEffects);
             //FillWeatherEffects(ref WeatherManagerNew.Instance.SnowEffects);
             //FillWeatherEffects(ref WeatherManagerNew.Instance.SeasonEffects);
+
+            if(WeatherManagerNew.Instance.SnowEffects.Length > 0 && retrievedSeason.Season.SnowEnabled)
+            {
+                for(int currentEffect = 0; currentEffect < WeatherManagerNew.Instance.SnowEffects.Length; currentEffect++)
+                {
+                    var snowEffect = WeatherManagerNew.Instance.SnowEffects[currentEffect];
+
+                    if(snowEffect.m_followCharacter == null)
+                    {
+                        if(currentEffect == 0)
+                        {
+                            snowEffect.m_followCharacter = CharacterManager.Instance.GetFirstLocalCharacter();
+                            //snowEffect.CheckCharacter(CharacterManager.Instance.GetFirstLocalCharacter());
+                        }
+                        else
+                        {
+                            snowEffect.m_followCharacter = CharacterManager.Instance.GetSecondLocalCharacter();
+                            //snowEffect.CheckCharacter(CharacterManager.Instance.GetSecondLocalCharacter());
+                        }
+                    }
+                }
+
+                //Caldera fix
+                if(retrievedSeason.Season.SnowingEnabled)
+                {
+                    EnvironmentConditions.Instance.SnowingQuantity = 0.25f;
+                }
+            }
+
+            WeatherManagerNew.Instance.HasPrecipitation = true;
 
             //if(WeatherManagerNew.Instance.SnowEffects.Length < 1 && retrievedSeason.Season.SnowEnabled)
             //{

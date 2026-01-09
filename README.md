@@ -64,12 +64,12 @@ _Plays custom sound effects when the EnchantmentTable.DoneEnchanting event occur
 <details>
     <summary>Chance to learn skills on enemy kill</summary>
 
-When enemy dies by you, you have a chance to learn weapon type skill.<br>
-If all weapon type skills a learned you will be able to learn other weapon types skills.<br>
-Finally if all weapon type based skills a learned you can learn monster skills that could be broken.<br>
+When you kill an enemy, you have a chance to learn a weapon-type skill.<br>
+Once all weapon-type skills are learned, you can start learning skills from other weapon types.<br>
+After all weapon-based skills are learned, you will be able to learn certain monster skills, which may be overpowered or may not function correctly.<br>
 
 <div align="center">
-	<video src="https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/videos/SkillReceived.mp4" width="640" controls></video>
+	<video src="https://github.com/user-attachments/assets/c6b0edc4-ffec-45fb-86ff-a6d428a12d97" width="640" controls></video>
 </div>
 
 </details>
@@ -87,7 +87,7 @@ Enemies can indeed cast spells and early on it is better to avoid them.
 <details>
     <summary>War Scenario</summary>
 
-Spawns random faction groups that start fighting. Only appears in open world.
+Spawns random faction groups that start fighting. Only appears in open world.<br>
 ![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/war.png)
 
 </details>
@@ -95,7 +95,7 @@ Spawns random faction groups that start fighting. Only appears in open world.
 <details>
     <summary>Ambush Scenario</summary>
 
-Spawns random faction group. The only scenario that can happen in towns but only from 20:00 to 04:00.
+Spawns random faction group. The only scenario that can happen in towns but only from 20:00 to 04:00.<br>
 ![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/ambush.png)
 
 </details>
@@ -103,7 +103,7 @@ Spawns random faction group. The only scenario that can happen in towns but only
 <details>
     <summary>Wanderer Encounter Scenario</summary>
 
-Spawns faction enemy.
+Spawns random faction enemy.<br>
 ![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/wanderer.png)
 
 </details>
@@ -127,7 +127,7 @@ Additionally 3 seasons are added.
     <summary>Winter</summary>
     
 Adds winter to other regions.
-
+<br>
 ![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/winter-hallowed-marsh.png)
 </details>
 
@@ -136,7 +136,7 @@ Adds winter to other regions.
 
 Cloudy mist season that makes very hard to navigate and each hour changes
 the fog density.
-
+<br>
 ![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/foggy-spirits.png)
 </details>
 
@@ -144,6 +144,7 @@ the fog density.
     <summary>Great war</summary>
 
 Each hour there is a chance you will encounter additional war/ambush/wanderer scenario or nothing.
+<br>
 ![Picture](https://raw.githubusercontent.com/GymMed/Outward-Game-Settings/refs/heads/complex/preview/images/great-war.png)
 </details>
 
@@ -152,8 +153,7 @@ Each hour there is a chance you will encounter additional war/ambush/wanderer sc
 <details>
     <summary>Sideloader</summary>
 
-I did add additional character AI classes. They work more as an example instead
-of actually using them in your mods.
+I did add additional character AI classes. They work more as an example.
 </details>
 
 ## How to change settings?

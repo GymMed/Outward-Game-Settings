@@ -25,17 +25,35 @@ namespace OutwardGameSettings.Utility.Enums
         {
             get
             {
-                if (_seasons == null)
+                if (_seasons == null || AreSeasonsInvalid())
                 {
-                    _seasons = new Dictionary<CustomSeasons, BasicSeason>
-                    {
-                        { CustomSeasons.Winter, GetWinterSeason() },
-                        { CustomSeasons.FoggySpirits, GetFoggySpiritsSeason() },
-                        { CustomSeasons.GreatWar, GetGreatWarSeason() }
-                    };
+                    RebuildSeasons();
                 }
                 return _seasons;
             }
+        }
+
+        private static void RebuildSeasons()
+        {
+            #if DEBUG
+                OutwardGameSettings.LogMessage("Rebuilding custom seasons (scene reload detected)");
+            #endif
+
+            if (_seasons != null)
+            {
+                foreach (var pair in _seasons)
+                {
+                    if (pair.Value?.Season != null)
+                        UnityEngine.Object.Destroy(pair.Value.Season.gameObject);
+                }
+            }
+
+            _seasons = new Dictionary<CustomSeasons, BasicSeason>
+            {
+                { CustomSeasons.Winter, GetWinterSeason() },
+                { CustomSeasons.FoggySpirits, GetFoggySpiritsSeason() },
+                { CustomSeasons.GreatWar, GetGreatWarSeason() }
+            };
         }
 
         public static readonly Dictionary<CustomSeasons, string> SeasonsNames = new()
@@ -297,6 +315,22 @@ namespace OutwardGameSettings.Utility.Enums
             {
                 time.OnHour -= season.Value.OnHour;
             }
+        }
+
+        public static bool AreSeasonsInvalid()
+        {
+            if (_seasons == null)
+                return true;
+
+            foreach (var kvp in _seasons)
+            {
+                if (kvp.Value == null)
+                    return true;
+
+                if (kvp.Value.Season == null) // Unity destroyed
+                    return true;
+            }
+            return false;
         }
     }
 }

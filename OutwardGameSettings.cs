@@ -26,7 +26,7 @@ namespace OutwardGameSettings
         // Choose a NAME for your project, generally the same as your Assembly Name.
         public const string NAME = "Outward Game Settings";
         // Increment the VERSION when you release a new version of your mod.
-        public const string VERSION = "1.1.0";
+        public const string VERSION = "1.1.1";
 
         public static string prefix = "[GymMed-Game-Settings]";
 
